@@ -14,11 +14,6 @@ namespace tech.project
 
     protected override void OnModelCreating( DbModelBuilder modelBuilder )
     {
-      modelBuilder.Entity<Employee>().HasKey<Guid>(x => x.Id).ToTable("Employee");
-      modelBuilder.Entity<Training>().HasKey<Guid>(x => x.Id).ToTable("Training");
-
-      modelBuilder.Entity<EmployeeTraining>().HasKey<Guid>(x => x.Id);
-
     }
 
   }

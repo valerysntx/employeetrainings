@@ -61,6 +61,57 @@ namespace tech.project.tests
       model.SaveChanges();
     }
 
+    [Test]
+    public void ShouldAttendTheTrainingTest()
+    {
+      var model = InitializeModel();
+      Assert.NotNull(model);
+      var employee = model.Employees.FirstOrDefault();
+
+      model.EmployeeTrainings.Add(
+        new EmployeeTraining
+        {
+          Id = Guid.NewGuid(),
+          AttendDate = DateTime.Now,
+          Training = new Training { Id = Guid.NewGuid(), Name = "Empty room training", Description = "Anybody ?" },
+          Employee = employee
+        });
+
+
+    }
+
+    [Test]
+    public void ShouldAttendTheTrainingTwiceTest()
+    {
+      var model = InitializeModel();
+      Assert.NotNull(model);
+      var employee = model.Employees.FirstOrDefault();
+
+      var training = new Training { Id = Guid.NewGuid(), Name = "Empty room training", Description = "Anybody ?" };
+
+      model.EmployeeTrainings.AddRange(
+       new[] {
+        new EmployeeTraining
+        {
+          Id = Guid.NewGuid(),
+          AttendDate = DateTime.Now,
+          Training = training,
+          Employee = employee
+        },
+
+        new EmployeeTraining
+        {
+          Id = Guid.NewGuid(),
+          AttendDate = DateTime.Now + TimeSpan.FromHours(-1),
+          Training = training,
+          Employee = employee
+
+        }}
+       );
+ 
+      Assert.True(model.EmployeeTrainings.Local.Count() == 2);
+
+    }
 
 
     public class TrainingVisit: EmployeeTraining

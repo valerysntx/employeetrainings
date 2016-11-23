@@ -20,6 +20,6 @@ namespace tech.project
         public DateTime Birthdate { get; set; }
 
 
-       
-    }
+
+      }
 }
