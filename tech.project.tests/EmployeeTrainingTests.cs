@@ -12,7 +12,7 @@ namespace tech.project.tests
     [Test]
     public void ShouldCreateEmployeeInstance()
     {
-      Assert.Catch<Exception>(() => new Training());
+      Assert.NotNull(new Employee() { Id = Guid.NewGuid(), Name = "Employee", Surname = "sdfgsfdg" ,Birthdate = DateTime.Parse("01/01/1980")});
     }
 
     [Test]
@@ -26,8 +26,10 @@ namespace tech.project.tests
 
     public Model InitializeModel()
     {
-      Model = new Model();
+      Model.Configuration.LazyLoadingEnabled = true;
 
+      Model = new Model();
+      
       Model.Employees.AddRange(new[] {
          new Employee {
             Id = Guid.NewGuid(),
@@ -51,8 +53,6 @@ namespace tech.project.tests
     {
       var model = InitializeModel();
       Assert.NotNull(model);
-
-
     }
 
     public class TrainingVisit: EmployeeTraining

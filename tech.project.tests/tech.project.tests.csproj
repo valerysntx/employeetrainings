@@ -71,14 +71,12 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="App.config" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>App.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\tech.project.database\tech.project.database.sqlproj">
+      <Project>{2bf4d177-c63c-4273-a303-2c97c9b9cb60}</Project>
+      <Name>tech.project.database</Name>
+    </ProjectReference>
     <ProjectReference Include="..\tech.project\tech.project.csproj">
       <Project>{53d74e49-6cbd-4ddb-ab75-372d74c94287}</Project>
       <Name>tech.project</Name>
