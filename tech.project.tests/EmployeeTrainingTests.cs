@@ -18,19 +18,17 @@ namespace tech.project.tests
     [Test]
     public void ShouldCreateTrainingInstance()
     {
-
+      Assert.NotNull(new Training() { Id = Guid.NewGuid(), Name = "Juniors!", Description = "Train Juniors" } );
     }
 
     static Model Model { get; set; }
 
-    [TestFixtureSetUp]
-    void SetupModel()
+
+    public Model InitializeModel()
     {
       Model = new Model();
-      if (! Model.Database.Exists())
-      {
-        Model.Database.CreateIfNotExists();
-        Model.Employees.AddRange(new[] {
+
+      Model.Employees.AddRange(new[] {
          new Employee {
             Id = Guid.NewGuid(),
             Birthdate = DateTime.Parse("08/21/1981"),
@@ -45,18 +43,13 @@ namespace tech.project.tests
         }
       });
 
+      return Model;
      }
-      
-
-     Model.SaveChanges();
-
-   }
-
+     
     [Test]
-    public void SelectEachEmployeeTrainings()
+    public void ShouldCreateModel()
     {
-
-      var model = new Model();
+      var model = InitializeModel();
       Assert.NotNull(model);
 
 
