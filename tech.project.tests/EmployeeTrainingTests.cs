@@ -71,13 +71,13 @@ namespace tech.project.tests
     public IEnumerable<TrainingVisit> GetLatestTrainings(Employee employee )
     {
       return Model.EmployeeTrainings.AsQueryable()
+                    .Where(x=> x.Employee.Id == employee.Id)
                     .Select(t => new TrainingVisit
                     {
                       AttendDate = t.AttendDate,
                       Employee = t.Employee,
                       Training = t.Training
                     }).Distinct();
-
     }
 
 
