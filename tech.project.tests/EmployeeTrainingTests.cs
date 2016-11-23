@@ -26,8 +26,6 @@ namespace tech.project.tests
 
     public Model InitializeModel()
     {
-      Model.Configuration.LazyLoadingEnabled = true;
-
       Model = new Model();
       
       Model.Employees.AddRange(new[] {
