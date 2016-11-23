@@ -53,6 +53,16 @@ namespace tech.project.tests
       Assert.NotNull(model);
     }
 
+    [Test]
+    public void CouldPersistTheModel()
+    {
+      var model = InitializeModel();
+      Assert.NotNull(model);
+      model.SaveChanges();
+    }
+
+
+
     public class TrainingVisit: EmployeeTraining
     {
 
