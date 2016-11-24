@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System.Data.Entity;
 using System.Collections.Generic;
 using System.Linq;
+using static tech.project.Controllers.TrainingsApi;
 
 namespace tech.project.tests
 {
@@ -88,7 +89,6 @@ namespace tech.project.tests
       var employee = model.Employees.FirstOrDefault();
 
       var training = new Training { Id = Guid.NewGuid(), Name = "Empty room training", Description = "Anybody ?" };
-
       model.EmployeeTrainings.AddRange(
        new[] {
         new EmployeeTraining
@@ -113,7 +113,6 @@ namespace tech.project.tests
 
     }
 
-
     public class TrainingVisit: EmployeeTraining
     {
 
@@ -129,6 +128,12 @@ namespace tech.project.tests
                       Employee = t.Employee,
                       Training = t.Training
                     }).Distinct();
+    }
+
+    [Test]
+    public void ShouldCreateEmployeeTrainingsRepository()
+    {
+      Assert.That(new EmployeeTrainingsRepository<Model>( InitializeModel() ) != null);
     }
 
 
