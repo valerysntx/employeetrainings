@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using System.Data.Entity;
 using System.Collections.Generic;
 using System.Linq;
 using static tech.project.Controllers.TrainingsApi;
@@ -8,8 +7,11 @@ using static tech.project.Controllers.TrainingsApi;
 namespace tech.project.tests
 {
   [TestFixture]
+  [Description("local mem-context model + repository tests")]
   public class EmployeeTrainingTests
   {
+    static Model Model { get; set; }
+
     [Test]
     public void ShouldCreateEmployeeInstance()
     {
@@ -22,44 +24,83 @@ namespace tech.project.tests
       Assert.NotNull(new Training() { Id = Guid.NewGuid(), Name = "Juniors!", Description = "Train Juniors" } );
     }
 
-    static Model Model { get; set; }
-
-
     public Model InitializeModel()
     {
       Model = new Model();
-      
-      Model.Employees.AddRange(new[] {
-         new Employee {
+
+      Model.Employees.Add(
+        new Employee {
             Id = Guid.NewGuid(),
             Birthdate = DateTime.Parse("08/21/1981"),
             Name = "Valery",
             Surname = "Schepaschenko"
-          },
-
-        new Employee {
-          Id = Guid.NewGuid(),
-          Birthdate = DateTime.Parse("12/06/1986"),
-          Name = "Name", Surname = "Surname"
-        }
       });
 
+      Model.Employees.Add(
+        new Employee
+        {
+          Id = Guid.NewGuid(),
+          Birthdate = DateTime.Parse("08/01/1988"),
+          Name = "Name",
+          Surname = "Surname"
+        });
+
       return Model;
+
      }
      
     [Test]
     public void ShouldCreateModel()
     {
-      var model = InitializeModel();
-      Assert.NotNull(model);
+      Assert.NotNull(InitializeModel());
     }
 
     [Test]
+    [Description("As soon the model was overriden - see false-positive results for such test")]
     public void CouldPersistTheModel()
     {
       var model = InitializeModel();
       Assert.NotNull(model);
-      model.SaveChanges();
+      Assert.DoesNotThrow(() => model.SaveChanges());
+    }
+
+    
+    [Test]
+    public void ShouldBeAbleToGetAllTrainingsFromRepository()
+    {
+      Model model = InitializeModel();
+      var repository = new EmployeeTrainingsRepository(model);
+
+      Assert.NotNull(repository);
+
+      Employee employee = model.Employees.Local.FirstOrDefault();
+      Assert.NotNull(employee);
+
+      var training = new Training { Id = Guid.NewGuid(), Name = "Empty room training", Description = "Anybody ?" };
+      model.EmployeeTrainings.AddRange(
+       new[] {
+        new EmployeeTraining
+        {
+          Id = Guid.NewGuid(),
+          AttendDate = DateTime.Now,
+          Training = training,
+          Employee = employee
+        },
+
+        new EmployeeTraining
+        {
+          Id = Guid.NewGuid(),
+          AttendDate = DateTime.Now + TimeSpan.FromHours(-1),
+          Training = training,
+          Employee = employee
+
+        }}
+       );
+
+      Assert.DoesNotThrow(() => {
+        Assert.That(repository.GetEmployeeTrainings().Count() == 2);
+      });
+  
     }
 
     [Test]
@@ -67,6 +108,7 @@ namespace tech.project.tests
     {
       var model = InitializeModel();
       Assert.NotNull(model);
+
       var employee = model.Employees.FirstOrDefault();
 
       model.EmployeeTrainings.Add(
@@ -78,7 +120,7 @@ namespace tech.project.tests
           Employee = employee
         });
 
-
+      Assert.That(model.EmployeeTrainings.Local.Any());
     }
 
     [Test]
@@ -133,7 +175,7 @@ namespace tech.project.tests
     [Test]
     public void ShouldCreateEmployeeTrainingsRepository()
     {
-      Assert.That(new EmployeeTrainingsRepository<Model>( InitializeModel() ) != null);
+      Assert.That(new EmployeeTrainingsRepository( InitializeModel() ) != null);
     }
 
 

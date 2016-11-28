@@ -9,6 +9,8 @@ namespace tech.project
     [Table("EmployeeTraining")]
     public partial class EmployeeTraining
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
         public Employee Employee { get; set; }

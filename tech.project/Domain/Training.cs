@@ -9,6 +9,7 @@ namespace tech.project
     [Table("Training")]
     public partial class Training
     {
+        [Key]
         public Guid Id { get; set; }
 
         [Required]

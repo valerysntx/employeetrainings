@@ -107,7 +107,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -123,6 +125,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Repository\EmployeeTrainingsAbstractRepository.cs" />
     <Compile Include="Repository\EmployeeTrainingsRepository.cs" />
     <Compile Include="Controllers\TrainingsApi.cs" />
     <Compile Include="Domain\Employee.cs" />
@@ -130,6 +133,7 @@
     <Compile Include="Domain\Model.cs" />
     <Compile Include="MoreLinq\MoreEnumerable.DistinctBy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\IEmployeeTrainingsRepository.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Domain\Training.cs" />
   </ItemGroup>
