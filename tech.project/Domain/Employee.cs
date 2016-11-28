@@ -9,6 +9,8 @@ namespace tech.project
     [Table("Employee")]
     public partial class Employee
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
         [Required]
@@ -18,8 +20,6 @@ namespace tech.project
         public string Surname { get; set; }
 
         public DateTime Birthdate { get; set; }
-
-
 
       }
 }

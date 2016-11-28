@@ -68,15 +68,28 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="conventions\Database1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Database1.tt</DependentUpon>
+    </Compile>
     <Compile Include="EmployeeTrainingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="conventions\Database1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Database1.cs</LastGenOutput>
+    </Content>
+    <None Include="conventions\EF.Reverse.POCO.Core.ttinclude" />
+    <None Include="conventions\EF.Reverse.POCO.ttinclude" />
     <None Include="packages.config" />
     <Content Include="App.config" />
   </ItemGroup>
@@ -89,6 +102,9 @@
       <Project>{53d74e49-6cbd-4ddb-ab75-372d74c94287}</Project>
       <Name>tech.project</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,9 +1,8 @@
 namespace tech.project
 {
-  using System;
   using System.Data.Entity;
-  using System.ComponentModel.DataAnnotations.Schema;
-  using System.Linq;
+  using System.Threading;
+  using System.Threading.Tasks;
 
   public partial class Model : DbContext
   {
@@ -14,7 +13,27 @@ namespace tech.project
 
     protected override void OnModelCreating( DbModelBuilder modelBuilder )
     {
+      Database.SetInitializer(new DropCreateDatabaseAlways<Model>());
+
+      modelBuilder.Entity<Training>().HasKey(x=>x.Id);
+      modelBuilder.Entity<Employee>().HasKey(x => x.Id);
+
+      modelBuilder.Entity<EmployeeTraining>().HasRequired(x => x.Employee);
+      modelBuilder.Entity<EmployeeTraining>().HasRequired(x => x.Training);
     }
+
+    #region ! Overriden Persistence
+
+    public override int SaveChanges()
+    {
+      return 0;
+    }
+    public override Task<int> SaveChangesAsync( CancellationToken cancellationToken )
+    {
+      return Task.FromResult(0);
+    }
+    
+    #endregion
 
   }
 }

@@ -1,18 +1,37 @@
 ﻿using System;
 using NUnit.Framework;
-using System.Data.Entity;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq;               
+using static tech.project.Controllers.TrainingsApi;
 
 namespace tech.project.tests
 {
+  /// <summary>
+  // order by date descending -> last visit
+  /// </summary>
+  public static class TrainingVisitExtensions
+  {
+    public static EmployeeTraining Latest( this IQueryable<EmployeeTraining> et, Employee emp)
+    {
+       return et.Where(x => x.Employee.Id == emp.Id ).OrderByDescending(x => x.AttendDate).LastOrDefault();
+    }
+
+    public static EmployeeTraining Latest( this IEnumerable<EmployeeTraining> et, Employee emp )
+    {
+      return et.Where(x => x.Employee.Id == emp.Id).OrderByDescending(x => x.AttendDate).LastOrDefault();
+    }
+  }
+
   [TestFixture]
+  [Description("local mem-context model + repository tests")]
   public class EmployeeTrainingTests
   {
+    static Model Model { get; set; }
+
     [Test]
     public void ShouldCreateEmployeeInstance()
     {
-      Assert.NotNull(new Employee() { Id = Guid.NewGuid(), Name = "Employee", Surname = "sdfgsfdg" ,Birthdate = DateTime.Parse("01/01/1980")});
+      Assert.NotNull(new Employee() { Id = Guid.NewGuid(), Name = "Employee", Surname = "Surname", Birthdate = DateTime.Parse("01/01/1980")});
     }
 
     [Test]
@@ -21,44 +40,83 @@ namespace tech.project.tests
       Assert.NotNull(new Training() { Id = Guid.NewGuid(), Name = "Juniors!", Description = "Train Juniors" } );
     }
 
-    static Model Model { get; set; }
-
-
     public Model InitializeModel()
     {
       Model = new Model();
-      
-      Model.Employees.AddRange(new[] {
-         new Employee {
+
+      Model.Employees.Add(
+        new Employee {
             Id = Guid.NewGuid(),
             Birthdate = DateTime.Parse("08/21/1981"),
             Name = "Valery",
             Surname = "Schepaschenko"
-          },
-
-        new Employee {
-          Id = Guid.NewGuid(),
-          Birthdate = DateTime.Parse("12/06/1986"),
-          Name = "Name", Surname = "Surname"
-        }
       });
 
+      Model.Employees.Add(
+        new Employee
+        {
+          Id = Guid.NewGuid(),
+          Birthdate = DateTime.Parse("08/01/1988"),
+          Name = "Name",
+          Surname = "Surname"
+        });
+
       return Model;
+
      }
      
     [Test]
     public void ShouldCreateModel()
     {
-      var model = InitializeModel();
-      Assert.NotNull(model);
+      Assert.NotNull(InitializeModel());
     }
 
     [Test]
+    [Description("As soon the model was overriden - see false-positive results for such test")]
     public void CouldPersistTheModel()
     {
       var model = InitializeModel();
       Assert.NotNull(model);
-      model.SaveChanges();
+      Assert.DoesNotThrow(() => model.SaveChanges());
+    }
+
+    
+    [Test]
+    public void ShouldBeAbleToGetAllTrainingsFromRepository()
+    {
+      Model model = InitializeModel();
+      var repository = new EmployeeTrainingsRepository(model);
+
+      Assert.NotNull(repository);
+
+      Employee employee = model.Employees.Local.FirstOrDefault();
+      Assert.NotNull(employee);
+
+      var training = new Training { Id = Guid.NewGuid(), Name = "Empty room training", Description = "Anybody ?" };
+      model.EmployeeTrainings.AddRange(
+       new[] {
+        new EmployeeTraining
+        {
+          Id = Guid.NewGuid(),
+          AttendDate = DateTime.Now,
+          Training = training,
+          Employee = employee
+        },
+
+        new EmployeeTraining
+        {
+          Id = Guid.NewGuid(),
+          AttendDate = DateTime.Now + TimeSpan.FromHours(-1),
+          Training = training,
+          Employee = employee
+
+        }}
+       );
+
+      Assert.DoesNotThrow(() => {
+        Assert.That(repository.GetEmployeeTrainings().Count() == 2);
+      });
+  
     }
 
     [Test]
@@ -66,6 +124,7 @@ namespace tech.project.tests
     {
       var model = InitializeModel();
       Assert.NotNull(model);
+
       var employee = model.Employees.FirstOrDefault();
 
       model.EmployeeTrainings.Add(
@@ -77,7 +136,7 @@ namespace tech.project.tests
           Employee = employee
         });
 
-
+      Assert.That(model.EmployeeTrainings.Local.Any());
     }
 
     [Test]
@@ -88,7 +147,6 @@ namespace tech.project.tests
       var employee = model.Employees.FirstOrDefault();
 
       var training = new Training { Id = Guid.NewGuid(), Name = "Empty room training", Description = "Anybody ?" };
-
       model.EmployeeTrainings.AddRange(
        new[] {
         new EmployeeTraining
@@ -113,22 +171,10 @@ namespace tech.project.tests
 
     }
 
-
-    public class TrainingVisit: EmployeeTraining
+    [Test]
+    public void ShouldCreateEmployeeTrainingsRepository()
     {
-
-    }
-
-    public IEnumerable<TrainingVisit> GetLatestTrainings(Employee employee )
-    {
-      return Model.EmployeeTrainings.AsQueryable()
-                    .Where(x=> x.Employee.Id == employee.Id)
-                    .Select(t => new TrainingVisit
-                    {
-                      AttendDate = t.AttendDate,
-                      Employee = t.Employee,
-                      Training = t.Training
-                    }).Distinct();
+      Assert.That(new EmployeeTrainingsRepository( InitializeModel() ) != null);
     }
 
 
