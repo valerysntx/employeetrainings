@@ -80,6 +80,37 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Database1.tt</DependentUpon>
     </Compile>
+    <Compile Include="conventions\Employee.cs">
+      <DependentUpon>Database1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="conventions\EmployeeConfiguration.cs">
+      <DependentUpon>Database1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="conventions\EmployeeTraining.cs">
+      <DependentUpon>Database1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="conventions\EmployeeTrainingConfiguration.cs">
+      <DependentUpon>Database1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="conventions\FakeDbSet.cs">
+      <DependentUpon>Database1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="conventions\FakeModel.cs">
+      <DependentUpon>Database1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="conventions\IModel.cs">
+      <DependentUpon>Database1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="conventions\Model.cs">
+      <DependentUpon>Database1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="conventions\Training.cs">
+      <DependentUpon>Database1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="conventions\TrainingConfiguration.cs">
+      <DependentUpon>Database1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeTrainingContextTests.cs" />
     <Compile Include="EmployeeTrainingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
