@@ -1,11 +1,27 @@
 ﻿using System;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq;               
 using static tech.project.Controllers.TrainingsApi;
 
 namespace tech.project.tests
 {
+  /// <summary>
+  // order by date descending -> last visit
+  /// </summary>
+  public static class TrainingVisitExtensions
+  {
+    public static EmployeeTraining Latest( this IQueryable<EmployeeTraining> et, Employee emp)
+    {
+       return et.Where(x => x.Employee.Id == emp.Id ).OrderByDescending(x => x.AttendDate).LastOrDefault();
+    }
+
+    public static EmployeeTraining Latest( this IEnumerable<EmployeeTraining> et, Employee emp )
+    {
+      return et.Where(x => x.Employee.Id == emp.Id).OrderByDescending(x => x.AttendDate).LastOrDefault();
+    }
+  }
+
   [TestFixture]
   [Description("local mem-context model + repository tests")]
   public class EmployeeTrainingTests
@@ -15,7 +31,7 @@ namespace tech.project.tests
     [Test]
     public void ShouldCreateEmployeeInstance()
     {
-      Assert.NotNull(new Employee() { Id = Guid.NewGuid(), Name = "Employee", Surname = "sdfgsfdg" ,Birthdate = DateTime.Parse("01/01/1980")});
+      Assert.NotNull(new Employee() { Id = Guid.NewGuid(), Name = "Employee", Surname = "Surname", Birthdate = DateTime.Parse("01/01/1980")});
     }
 
     [Test]
@@ -153,23 +169,6 @@ namespace tech.project.tests
  
       Assert.True(model.EmployeeTrainings.Local.Count() == 2);
 
-    }
-
-    public class TrainingVisit: EmployeeTraining
-    {
-
-    }
-
-    public IEnumerable<TrainingVisit> GetLatestTrainings(Employee employee )
-    {
-      return Model.EmployeeTrainings.AsQueryable()
-                    .Where(x=> x.Employee.Id == employee.Id)
-                    .Select(t => new TrainingVisit
-                    {
-                      AttendDate = t.AttendDate,
-                      Employee = t.Employee,
-                      Training = t.Training
-                    }).Distinct();
     }
 
     [Test]
