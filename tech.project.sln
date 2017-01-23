@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tech.project.tests", "tech.
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "tech.project.database", "tech.project.database\tech.project.database.sqlproj", "{2BF4D177-C63C-4273-A303-2C97C9B9CB60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AD.azuth", "AD.azuth\AD.azuth.csproj", "{4D5A4F80-C6BA-4EB8-9036-17088BF37710}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{2BF4D177-C63C-4273-A303-2C97C9B9CB60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BF4D177-C63C-4273-A303-2C97C9B9CB60}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2BF4D177-C63C-4273-A303-2C97C9B9CB60}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{4D5A4F80-C6BA-4EB8-9036-17088BF37710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D5A4F80-C6BA-4EB8-9036-17088BF37710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D5A4F80-C6BA-4EB8-9036-17088BF37710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D5A4F80-C6BA-4EB8-9036-17088BF37710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
